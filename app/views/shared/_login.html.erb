@@ -1,0 +1,20 @@
+<div class="mx-auto mt-3 px-3" style="width: 400px;">
+  <h1>ログインしてください</h1>
+
+  <%= form_with(url: login_path, local: true) do |f| %>
+
+    <div class="mb-3">
+      <%= f.label :username, 'キャラクタ名' %>
+      <%= f.text_field :username, required: :true, class: 'form-control' %>
+      <small class="text-secondary">テラリアゲームキャラクター名を入力してください</small>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :password, 'パスワード' %>
+      <%= f.password_field :password, required: :true, class: 'form-control' %>
+      <small class="text-secondary">テラリアゲームサーバーログイン時の最初に入力したパスワードを入力してください</small>
+    </div>
+
+    <%= f.submit "ログイン", class: "btn btn-primary w-100" %>
+  <% end %>
+</div>

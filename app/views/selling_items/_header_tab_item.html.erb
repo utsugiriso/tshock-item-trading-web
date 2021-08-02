@@ -1,0 +1,3 @@
+<li class="nav-item">
+  <a class="nav-link <%= :active if @status == SellingItem.statuses[status] %>" href="<%= selling_items_path(status: SellingItem.statuses[status]) %>"><%= SellingItem.statuses_i18n[status] %></a>
+</li>

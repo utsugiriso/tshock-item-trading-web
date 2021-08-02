@@ -1,0 +1,16 @@
+ja:
+  date:
+    formats:
+      default: "%Y年%m月%d日"
+      long: "%Y年%m月%d日(%a)"
+      short: "%m/%d"
+  time:
+    formats:
+      default: ! '%Y/%m/%d %H:%M:%S'
+      long: ! '%Y年%m月%d日(%a) %H時%M分%S秒 %z'
+      short: ! '%y/%m/%d %H:%M'
+  enums:
+    selling_item:
+      status:
+        on_sale: 販売中
+        canceled: キャンセル済

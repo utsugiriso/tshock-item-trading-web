@@ -1,0 +1,77 @@
+<% flash.each do |message_type, message| %>
+  <div class="alert alert-<%= message_type %> mb-0">
+    <% if message.is_a?(Array) %>
+      <% message.each do |message_item| %>
+        <%= message_item %><br>
+      <% end %>
+    <% else %>
+      <%= message %>
+    <% end %>
+  </div>
+<% end %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="<%= root_path %>">TShock Item trading</a>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a href="<%= my_items_path(innventory_item_id: Item::CHARACTER_INVENTORY_ID) %>" class="nav-link"><img src="<%= Item.image_url(Item::CHARACTER_INVENTORY_IMAGE_ID) %>"></a>
+      </li>
+      <% if current_user.ts_character.has_piggy_bank? %>
+        <li class="nav-item">
+          <a href="<%= my_items_path(innventory_item_id: Item::PIGGY_BANK_ID) %>" class="nav-link"><img src="<%= Item.image_url(Item::PIGGY_BANK_ID) %>"></a>
+        </li>
+      <% end %>
+      <% if current_user.ts_character.has_safe? %>
+        <li class="nav-item">
+          <a href="<%= my_items_path(innventory_item_id: Item::SAFE_ID) %>" class="nav-link"><img src="<%= Item.image_url(Item::SAFE_ID) %>"></a>
+        </li>
+      <% end %>
+      <% if current_user.ts_character.has_defenders_forge? %>
+        <li class="nav-item">
+          <a href="<%= my_items_path(innventory_item_id: Item::DEFENDERS_FORGE_ID) %>" class="nav-link"><img src="<%= Item.image_url(Item::DEFENDERS_FORGE_ID) %>"></a>
+        </li>
+      <% end %>
+      <% if current_user.ts_character.has_void_bag? %>
+        <li class="nav-item">
+          <a href="<%= my_items_path(innventory_item_id: Item::VOID_BAG_ID) %>" class="nav-link"><img src="<%= Item.image_url(Item::VOID_BAG_ID) %>"></a>
+        </li>
+      <% end %>
+      <li class="nav-item">
+        <a href="<%= selling_items_path %>" class="nav-link">販売</a>
+      </li>
+      <li class="nav-item">
+        <a href="<%= selling_items_path %>" class="nav-link">購入</a>
+      </li>
+    </ul>
+    <div class="d-flex">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="navbar-text">
+          <span class="me-4">
+          キャラクター：<%= current_user.name %>
+          </span>
+        </li>
+        <li class="navbar-text">所持コイン</li>
+        <li class="nav-item">
+          <ul class="navbar-nav">
+            <li class="nav-link">
+              <img src="<%= Item.image_url(Item::PLATINUM_COIN_ID) %>">
+              <%= current_user.ts_character.platinum_coin_count %>
+            </li>
+            <li class="nav-link">
+              <img src="<%= Item.image_url(Item::GOLD_COIN_ID) %>">
+              <%= current_user.ts_character.gold_coin_count %>
+            </li>
+            <li class="nav-link">
+              <img src="<%= Item.image_url(Item::SILVER_COIN_ID) %>">
+              <%= current_user.ts_character.silver_coin_count %>
+            </li>
+            <li class="nav-link">
+              <img src="<%= Item.image_url(Item::COPPER_COIN_ID) %>">
+              <%= current_user.ts_character.copper_coin_count %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

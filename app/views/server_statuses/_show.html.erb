@@ -1,0 +1,10 @@
+<tr>
+  <th scope="row"><%= @server_status['name'] %></th>
+  <td><%= @server_status['port'] %></td>
+  <td class="<%= 'text-success' if @server_status['playercount'] != 0 %>"><%= @server_status['playercount'] %></td>
+  <td>
+    <% @server_status['players'].each do |player| %>
+      <%= player['nickname'] %><br>
+    <% end %>
+  </td>
+</tr>

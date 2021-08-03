@@ -22,6 +22,8 @@ class Item
   VOID_VAULT_ID = 4076
   VOID_BAG_ID = 4131
 
+  SEARCH_ICON_ITEM_ID = 1299
+
   COPPER_COIN_WORTH = 1
   SILVER_COIN_WORTH = 100
   GOLD_COIN_WORTH = 10000
@@ -51,7 +53,7 @@ class Item
     File.join(Settings.item_images_directory_url, "item_#{id}.png")
   end
 
-  BANK_ITEM_IMAGE_IDS = {
+  STORAGE_ITEM_IMAGE_IDS = {
     Item::CHARACTER_INVENTORY_ID => Item::CHARACTER_INVENTORY_IMAGE_ID,
     Item::PIGGY_BANK_ID => Item::PIGGY_BANK_ID,
     Item::MONEY_THROUGH => Item::PIGGY_BANK_ID,
@@ -61,8 +63,8 @@ class Item
     Item::VOID_BAG_ID => Item::VOID_BAG_ID
   }.freeze
 
-  def self.bank_item_image_url(id)
-    image_url(BANK_ITEM_IMAGE_IDS[id])
+  def self.storage_item_image_url(id)
+    image_url(STORAGE_ITEM_IMAGE_IDS[id])
   end
 
   def invalid?
@@ -71,7 +73,7 @@ class Item
 
   alias empty? invalid?
 
-  def is_coin?
+  def coin?
     COIN_IDS.include?(self.id)
   end
 
@@ -108,7 +110,7 @@ class Item
   end
 
   def tradable?
-    !(self.invalid? || self.is_coin?)
+    !(self.invalid? || self.coin?)
   end
 
   def to_inventory_string
@@ -121,7 +123,7 @@ class Item
     self.prefix_id = 0
   end
 
-  def bank_item_ids
+  def storage_item_ids
     return nil if self.inventory_index.nil?
     if TsCharacter::INVENTORY_SLOT_RANGE.include?(self.inventory_index)
       nil

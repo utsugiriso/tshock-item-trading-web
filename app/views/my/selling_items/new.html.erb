@@ -1,15 +1,13 @@
 <h1>売る</h1>
 
-<div class="alert alert-info" role="alert">
-  ※ 必ずゲームからログアウトした状態で操作してください
-</div>
+<%= render 'shared/logout_the_game_required_alert' %>
 
 <h2>
   <img src="<%= @selling_item.item.image_url %>">
   <%= item_name_with_metadata(@selling_item.item) %>
 </h2>
 
-<%= form_with(model: @selling_item, local: true) do |f| %>
+<%= form_with(model: @selling_item, local: true, url: my_selling_items_path) do |f| %>
   <%= f.hidden_field :item_id %>
   <%= f.hidden_field :prefix_id %>
   <%= f.hidden_field :inventory_index %>
@@ -20,7 +18,7 @@
         <ul class="list-group list-group-horizontal">
           <li class="list-group-item">
             <div class="input-group">
-              <span class="input-group-text">販売個数</span>
+              <span class="input-group-text">出品個数</span>
               <%= f.number_field :stack, min: 1, max: f.object.item.stack, class: 'form-control' %>
             </div>
           </li>

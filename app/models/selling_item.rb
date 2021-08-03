@@ -1,20 +1,22 @@
 class SellingItem < ApplicationRecord
-  belongs_to :user, class_name: 'User'
+  belongs_to :user
   has_many :selling_item_barter_items, dependent: :destroy
+  has_one :purchased_item
 
   enum status: [
     :on_sale,
     :canceled,
-    :transaction_error_no_empty_slots, # 支払い待ち
-    :transaction_error_playing, # 支払い待ち
-    :transaction_completed
+    :paying,
+    :paid
   ]
-  enum transaction_type: [:coin, :barter], _suffix: true
 
   include CoinCalculator
+  include EnumTransactionType
+  include InventoryIndex
 
   attribute :loaded_item_by_inventory_index, :boolean, default: false
 
+  validates :user, presence: true
   validates :item_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :stack, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :prefix_id, presence: true
@@ -74,15 +76,15 @@ class SellingItem < ApplicationRecord
   end
 
   def within_max_stack
-    self.errors.add(:base, "販売数が所持数を超えています") if self.item.stack < self.stack
+    self.errors.add(:base, "出品数が所持数を超えています") if self.item.stack < self.stack
   end
 
   def within_maximum_selling_item_count
-    self.errors.add(:base, "同時に販売可能なのは#{TsCharacter::BANK_SLOT_COUNT}個までです") if self.user.selling_items.count == TsCharacter::BANK_SLOT_COUNT
+    self.errors.add(:base, "同時に出品可能なのは#{TsCharacter::BANK_SLOT_COUNT}個までです") if self.user.selling_items.count == TsCharacter::BANK_SLOT_COUNT
   end
 
   def check_coin
-    self.errors.add(:base, "コインは販売できません") if self.item.is_coin?
+    self.errors.add(:base, "コインは出品できません") if self.item.coin?
   end
 
   def check_item_same

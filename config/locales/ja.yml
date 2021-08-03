@@ -12,5 +12,5 @@ ja:
   enums:
     selling_item:
       status:
-        on_sale: 販売中
+        on_sale: 出品中
         canceled: キャンセル済

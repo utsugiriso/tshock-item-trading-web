@@ -10,4 +10,8 @@ module ApplicationHelper
       item.name
     end
   end
+
+  def padding_coin_count(coin_count)
+    coin_count.to_s.rjust(2, '0')
+  end
 end

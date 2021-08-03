@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_one :ts_character, foreign_key: 'Account'
   has_many :selling_items, dependent: :destroy
-  has_many :bought_items, dependent: :destroy
+  has_many :purchased_items, dependent: :destroy
+  has_many :purchase_requests, dependent: :destroy
 
   def id
     self['ID']

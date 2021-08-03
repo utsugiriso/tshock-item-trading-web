@@ -1,0 +1,10 @@
+<h1>買う</h1>
+
+<%= render 'shared/logout_the_game_required_alert' %>
+
+<h2>
+  <img src="<%= @selling_item.item.image_url %>">
+  <%= item_name_with_metadata(@selling_item.item) %>
+</h2>
+
+<%= render 'shared/selling_item_transaction_info', selling_item: @selling_item %>

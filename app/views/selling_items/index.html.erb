@@ -1,51 +1,55 @@
-<ul class="nav nav-tabs mb-3">
-  <%= render 'header_tab_item', status: :on_sale %>
-  <%= render 'header_tab_item', status: :canceled %>
-</ul>
-<% if @selling_items.empty? %>
+<div class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+  <div class="container-fluid">
+    <%= form_with(url: selling_items_path, method: :get, model: @form) do |f| %>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item p-2">
+          <div class="input-group">
+            <span class="input-group-text">検索キーワード</span>
+            <%= f.text_field :search_keyword, class: 'form-control' %>
+          </div>
+        </li>
+        <li class="nav-item p-2">
+          <div class=" form-check">
+            <%= f.check_box :purchasable_only, class: "form-check-input" %>
+            <%= f.label :purchasable_only, "購入可能なもののみ表示", class: "form-check-label" %>
+          </div>
+        </li>
+        <li class="nav-item p-2">
+          <div class=" form-check">
+            <%= f.select :order, options_for_select([
+                                                      ['新しい出品から表示', nil],
+                                                      ['安い出品から表示', SellingItems::SearchForm::ORDER_BY_COIN_COUNT_ASK],
+                                                      ['高い出品から表示', SellingItems::SearchForm::ORDER_BY_COIN_COUNT_DESK]
+                                                    ], @form.order), {}, class: "form-select" %>
+          </div>
+        </li>
+        <li class="nav-item p-2">
+          <%= f.button type: :submit, class: "btn btn-primary" do %>
+            <img src="<%= Item.image_url(Item::SEARCH_ICON_ITEM_ID) %>">
+            検索
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+</div>
+<hr>
+<% if @form.selling_items.empty? %>
   <%= render 'shared/no_items' %>
 <% else %>
   <ul class="list-group">
-    <% @selling_items.each do |selling_item| %>
+    <% @form.selling_items.each do |selling_item| %>
       <li class="list-group-item">
         <div class="row">
           <%= render 'shared/item_in_list', item: selling_item.item, stack: selling_item.stack %>
           <div class="col-sm">
-            <% case selling_item.transaction_type %>
-            <% when "coin" %>
-              <ul class="list-group list-group-horizontal">
-                <li class="list-group-item">
-                  <img src="<%= Item.image_url(Item::PLATINUM_COIN_ID) %>">
-                  <%= selling_item.platinum_coin_count %>
-                </li>
-                <li class="list-group-item">
-                  <img src="<%= Item.image_url(Item::GOLD_COIN_ID) %>">
-                  <%= selling_item.gold_coin_count %>
-                </li>
-                <li class="list-group-item">
-                  <img src="<%= Item.image_url(Item::SILVER_COIN_ID) %>">
-                  <%= selling_item.silver_coin_count %>
-                </li>
-                <li class="list-group-item">
-                  <img src="<%= Item.image_url(Item::COPPER_COIN_ID) %>">
-                  <%= selling_item.copper_coin_count %>
-                </li>
-              </ul>
-            <% when "barter" %>
-            <% else %>
-              <% raise '未知の取引タイプ' %>
-            <% end %>
+            <%= selling_item.user.name %>
           </div>
           <div class="col-sm">
-            <%= render 'selling_items/time_stamps', selling_item: selling_item %>
+            <%= render 'shared/selling_item_transaction_info', selling_item: selling_item %>
           </div>
           <div class="col-md-auto">
-            <% case @status %>
-            <% when SellingItem.statuses[:on_sale] %>
-              <%= link_to "キャンセル", selling_item_path(selling_item), method: :delete, class: 'btn btn-warning w-100' %>
-            <% when SellingItem.statuses[:canceled] %>
-              <img src="<%= Item.bank_item_image_url(TsCharacter.bank_item_id_by_inventory_index(selling_item.inventory_index)) %>">
-            <% end %>
+            <%= link_to "購入", new_my_purchased_item_path(selling_item_id: selling_item.id), class: 'btn btn-primary w-100' %>
           </div>
         </div>
       </li>

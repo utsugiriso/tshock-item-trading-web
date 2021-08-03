@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_01_070636) do
+ActiveRecord::Schema.define(version: 2021_08_02_151202) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -25,6 +25,27 @@ ActiveRecord::Schema.define(version: 2021_08_01_070636) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "purchase_requests", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "item_id", null: false
+    t.integer "stack", null: false
+    t.integer "coin_count"
+    t.integer "inventory_index", null: false
+    t.integer "transaction_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_purchase_requests_on_user_id"
+  end
+
+  create_table "purchased_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "selling_item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["selling_item_id"], name: "index_purchased_items_on_selling_item_id"
+    t.index ["user_id"], name: "index_purchased_items_on_user_id"
   end
 
   create_table "selling_item_barter_items", force: :cascade do |t|

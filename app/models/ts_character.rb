@@ -25,6 +25,11 @@ class TsCharacter < ApplicationRecord
   FORGE_RANGE = (TRASH_RANGE.last...(TRASH_RANGE.last + BANK_SLOT_COUNT))
   VOID_RANGE = (FORGE_RANGE.last...(FORGE_RANGE.last + BANK_SLOT_COUNT))
 
+  PLATINUM_COIN_INVENTORY_INDEX = 54
+  GOLD_COIN_INVENTORY_INDEX = 55
+  SILVER_COIN_INVENTORY_INDEX = 56
+  COPPER_COIN_INVENTORY_INDEX = 57
+
   ITEMS_DELIMITER = '~'.freeze
   ITEM_METADATA_DELIMITER = ','.freeze
 
@@ -44,7 +49,7 @@ class TsCharacter < ApplicationRecord
   attribute :has_defenders_forge, :boolean, default: false
   attribute :has_void_bag, :boolean, default: false
 
-  def items(bank_item_id = nil)
+  def items(storage_item_id = nil)
     @items ||= self['Inventory'].split(ITEMS_DELIMITER).
       map { |item_string| item_string.split(ITEM_METADATA_DELIMITER) }.
       map.with_index do |item_array, index|
@@ -60,10 +65,10 @@ class TsCharacter < ApplicationRecord
       item
     end
 
-    if bank_item_id.nil?
+    if storage_item_id.nil?
       @items
     else
-      @items[INVENTORY_RANGES[bank_item_id]]
+      @items[INVENTORY_RANGES[storage_item_id]]
     end
   end
 
@@ -71,9 +76,9 @@ class TsCharacter < ApplicationRecord
     items.select { |item| item.tradable? }
   end
 
-  def tradable_items(bank_item_id = nil)
+  def tradable_items(storage_item_id = nil)
     @tradable_items = {} if @tradable_items.nil?
-    @tradable_items[bank_item_id] ||= TsCharacter.tradable_items(self.items(bank_item_id))
+    @tradable_items[storage_item_id] ||= TsCharacter.tradable_items(self.items(storage_item_id))
   end
 
   def has_item_ids?(item_ids)
@@ -92,46 +97,66 @@ class TsCharacter < ApplicationRecord
     INVENTORY_RANGES.values.find { |inventory_range| inventory_range.include?(inventory_index) }
   end
 
-  def self.bank_item_id_by_inventory_index(inventory_index)
+  def self.storage_item_id_by_inventory_index(inventory_index)
     INVENTORY_RANGES.find { |_, inventory_range| inventory_range.include?(inventory_index) }[0]
   end
 
   def addable_slot?(item)
-    item.empty? && (item.bank_item_ids.nil? || self.has_item_ids?(item.bank_item_ids))
+    item.empty? && (item.storage_item_ids.nil? || self.has_item_ids?(item.storage_item_ids))
   end
 
   # アイテムごとにスタック上限があり、その定義を持っていないため、アイテム通過時は空欄に埋めるようにする
-  def add_item(item_id:, stack:, prefix_id:, inventory_index:)
+  def add_item(item_id:, stack:, prefix_id:, inventory_index: nil)
     empty_item_slot = nil
-    ActiveRecord::Base.transaction do
-      raise_if_playing
+    raise_if_playing
 
-      empty_item_slot = self.items[inventory_index] if addable_slot?(self.items[inventory_index])
-      empty_item_slot = self.items[TsCharacter.slot_range_by_inventory_index(inventory_index)].find { |item| addable_slot?(item) } if empty_item_slot.nil?
-      empty_item_slot = self.items.find { |item| addable_slot?(item) } if empty_item_slot.nil?
+    empty_item_slot = self.items[inventory_index] if !inventory_index.nil? && addable_slot?(self.items[inventory_index])
+    empty_item_slot = self.items[TsCharacter.slot_range_by_inventory_index(inventory_index)].find { |item| addable_slot?(item) } if empty_item_slot.nil?
+    empty_item_slot = self.items.find { |item| addable_slot?(item) } if empty_item_slot.nil?
 
-      if empty_item_slot.nil?
-        raise StandardError.new("アイテムを追加するスペースがインベントリにありません")
-      else
-        empty_item_slot.id = item_id
-        empty_item_slot.stack = stack
-        empty_item_slot.prefix_id = prefix_id
+    if empty_item_slot.nil?
+      raise StandardError.new("アイテムを追加するスペースがインベントリにありません")
+    else
+      empty_item_slot.id = item_id
+      empty_item_slot.stack = stack
+      empty_item_slot.prefix_id = prefix_id
 
-        self.update_inventory
-      end
+      self.update_inventory
     end
     empty_item_slot.inventory_index
   end
 
   def remove_item(inventory_index:, stack:)
-    ActiveRecord::Base.transaction do
-      raise_if_playing
+    raise_if_playing
 
-      item = self.items[inventory_index]
-      item.stack -= stack
-      item.destroy if item.stack <= 0
+    item = self.items[inventory_index]
+    item.stack -= stack
+    item.destroy if item.stack <= 0
 
-      self.update_inventory
+    self.update_inventory
+  end
+
+  def reset_coin
+    raise_if_playing
+    self.items[PLATINUM_COIN_INVENTORY_INDEX] = self.platinum_coin_count
+    self.items[GOLD_COIN_INVENTORY_INDEX] = self.gold_coin_count
+    self.items[SILVER_COIN_INVENTORY_INDEX] = self.silver_coin_count
+    self.items[COPPER_COIN_INVENTORY_INDEX] = self.copper_coin_count
+
+    self.items.each do |item|
+      item.destroy if item.coin?
     end
+
+    self.update_inventory
+  end
+
+  def add_coin(coin_count)
+    self.coin_count += coin_count
+    self.reset_coin
+  end
+
+  def remove_coin(coin_count)
+    self.coin_count -= coin_count
+    self.reset_coin
   end
 end

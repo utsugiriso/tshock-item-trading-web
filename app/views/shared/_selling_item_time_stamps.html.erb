@@ -1,0 +1,4 @@
+出品開始日：<%= l(selling_item.created_at) %>
+<% if selling_item.canceled_at.present? %>
+  <br/>出品キャンセル日：<%= l(selling_item.canceled_at) %>
+<% end %>

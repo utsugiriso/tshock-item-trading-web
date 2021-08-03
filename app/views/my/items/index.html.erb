@@ -1,0 +1,18 @@
+<% if @items.empty? %>
+  <%= render 'shared/no_items' %>
+<% else %>
+  <ul>
+    <% @items.each do |item| %>
+      <li class="list-group-item">
+        <div class="row">
+          <%= render 'shared/item_in_list', item: item %>
+          <div class="col-md-auto">
+            <a href="<%= new_my_selling_item_path(selling_item: { inventory_index: item.inventory_index, transaction_type: :coin }) %>" class="btn btn-primary">
+              出品
+            </a>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

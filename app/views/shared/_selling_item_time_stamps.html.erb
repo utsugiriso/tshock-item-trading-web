@@ -2,3 +2,6 @@
 <% if selling_item.canceled_at.present? %>
   <br/>出品キャンセル日：<%= l(selling_item.canceled_at) %>
 <% end %>
+<% if selling_item.purchased_item.present? %>
+  <br/>売却日：<%= l(selling_item.purchased_item.created_at) %>
+<% end %>

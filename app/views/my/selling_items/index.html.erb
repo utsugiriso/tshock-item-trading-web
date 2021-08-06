@@ -2,6 +2,8 @@
   <%= render 'header_tab_item', status: nil %>
   <%= render 'header_tab_item', status: :on_sale %>
   <%= render 'header_tab_item', status: :canceled %>
+  <%= render 'header_tab_item', status: :paying %>
+  <%= render 'header_tab_item', status: :paid %>
 </ul>
 <% if @status.nil? %>
   <%= render 'salable_items' %>

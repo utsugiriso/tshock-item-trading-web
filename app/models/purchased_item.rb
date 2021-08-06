@@ -2,7 +2,7 @@ class PurchasedItem < ApplicationRecord
   belongs_to :user
   belongs_to :selling_item
 
-  include InventoryIndex
+  include SlotIndex
 
   validates :user, presence: true
   validates :selling_item, presence: true

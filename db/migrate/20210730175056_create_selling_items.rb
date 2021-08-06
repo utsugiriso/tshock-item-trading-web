@@ -6,7 +6,7 @@ class CreateSellingItems < ActiveRecord::Migration[6.1]
       t.integer :item_id, null: false
       t.integer :stack, null: false
       t.integer :prefix_id, null: false
-      t.integer :inventory_index, null: false
+      t.integer :slot_index, null: false
 
       t.integer :transaction_type, null: false
       t.integer :coin_count

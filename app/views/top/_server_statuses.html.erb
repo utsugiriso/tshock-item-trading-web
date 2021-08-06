@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">サーバー名</th>
+    <th scope="col">Server Port</th>
+    <th scope="col">サーバー名</th>
+    <th scope="col">プレイ中キャラクター名</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% Settings.tshock.api_hosts.length.times do |i| %>
+    <tr>
+      <%= render_async server_status_path(i), html_element_name: :tr %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+

@@ -7,12 +7,16 @@ Rails.application.routes.draw do
 
   resources :server_statuses, only: :show
   resources :selling_items, only: [:index]
-  resources :items, only: [:index]
+  resources :purchase_requests, only: [:index, :new, :create, :destroy] do
+    collection do
+      get :my_index
+      get :search_items
+    end
+  end
 
   namespace :my do
     resources :items, only: :index
     resources :selling_items, only: [:index, :new, :create, :destroy]
     resources :purchased_items, only: [:index, :new, :create]
-    resources :purchase_requests, only: [:index, :new, :create, :destroy]
   end
 end

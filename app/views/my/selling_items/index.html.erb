@@ -1,35 +1,10 @@
 <ul class="nav nav-tabs mb-3">
+  <%= render 'header_tab_item', status: nil %>
   <%= render 'header_tab_item', status: :on_sale %>
   <%= render 'header_tab_item', status: :canceled %>
 </ul>
-<% if @selling_items.empty? %>
-  <%= render 'shared/no_items' %>
+<% if @status.nil? %>
+  <%= render 'salable_items' %>
 <% else %>
-  <ul class="list-group">
-    <% @selling_items.each do |selling_item| %>
-      <li class="list-group-item">
-        <div class="row">
-          <%= render 'shared/item_in_list', item: selling_item.item, stack: selling_item.stack %>
-          <div class="col-sm">
-            <%= render 'shared/selling_item_transaction_info', selling_item: selling_item %>
-          </div>
-          <div class="col-sm">
-            <%= render 'shared/selling_item_time_stamps', selling_item: selling_item %>
-          </div>
-          <div class="col-md-auto">
-            <% case @status %>
-            <% when SellingItem.statuses[:on_sale] %>
-              <%= link_to "キャンセル", my_selling_item_path(selling_item), method: :delete, class: 'btn btn-warning w-100' %>
-            <% when SellingItem.statuses[:canceled] %>
-              <img src="<%= Item.storage_item_image_url(selling_item.storage_item_id) %>">
-            <% when SellingItem.statuses[:paying] %>
-              <%= selling_item.purchased_item.user.name %>
-            <% when SellingItem.statuses[:paid] %>
-              <%= selling_item.purchased_item.user.name %>
-            <% end %>
-          </div>
-        </div>
-      </li>
-    <% end %>
-  </ul>
+  <%= render 'selling_items' %>
 <% end %>

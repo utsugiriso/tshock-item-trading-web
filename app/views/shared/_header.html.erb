@@ -1,14 +1,4 @@
-<% flash.each do |message_type, message| %>
-  <div class="alert alert-<%= message_type %> mb-0">
-    <% if message.is_a?(Array) %>
-      <% message.each do |message_item| %>
-        <%= message_item %><br>
-      <% end %>
-    <% else %>
-      <%= message %>
-    <% end %>
-  </div>
-<% end %>
+<%= render 'shared/header_alert' %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
   <div class="container-fluid">
     <a class="navbar-brand" href="<%= root_path %>">TShock Item trading</a>
@@ -47,7 +37,7 @@
           <a href="<%= selling_items_path %>" class="nav-link">購入</a>
         </li>
         <li class="nav-item">
-          <a href="<%= items_path %>" class="nav-link">ほしい物リクエスト</a>
+          <a href="<%= purchase_requests_path %>" class="nav-link">ほしい物リクエスト</a>
         </li>
         <li class="nav-item">
           <%= link_to 'ログアウト', logout_path, method: :delete, class: 'nav-link' %>

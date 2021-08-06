@@ -17,14 +17,7 @@ class SellingItems::SearchForm
       @selling_items = SellingItem.where.not(user_id: current_user.id).on_sale
       @selling_items = @selling_items.where(coin_count: 0..current_user.ts_character.coin_count) if self.purchasable_only
       if self.search_keyword.present?
-        item_ids = []
-        self.search_keyword.split(/[[:blank:]]/).reject(&:blank?).each do |keyword|
-          Settings.items.each do |item_id, names|
-            # Settings yamlなのでmapが使えない
-            item_ids << item_id.to_s.to_i if names[:name].downcase.include?(keyword.downcase) || names[:internal_name].downcase.include?(keyword.downcase)
-          end
-        end
-        @selling_items = @selling_items.where(item_id: item_ids)
+        @selling_items = @selling_items.where(item_id: Item.search_item_ids(self.search_keyword))
       end
       case self.order
       when ORDER_BY_COIN_COUNT_ASK

@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2021_08_02_151202) do
     t.integer "item_id", null: false
     t.integer "stack", null: false
     t.integer "coin_count"
-    t.integer "inventory_index", null: false
     t.integer "transaction_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -42,6 +41,7 @@ ActiveRecord::Schema.define(version: 2021_08_02_151202) do
   create_table "purchased_items", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "selling_item_id", null: false
+    t.integer "slot_index", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["selling_item_id"], name: "index_purchased_items_on_selling_item_id"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2021_08_02_151202) do
     t.integer "item_id", null: false
     t.integer "stack", null: false
     t.integer "prefix_id", null: false
-    t.integer "inventory_index", null: false
+    t.integer "slot_index", null: false
     t.integer "transaction_type", null: false
     t.integer "coin_count"
     t.integer "status", default: 0, null: false

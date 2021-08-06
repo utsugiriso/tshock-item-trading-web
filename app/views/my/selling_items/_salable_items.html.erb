@@ -1,0 +1,39 @@
+<div class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+  <div class="container-fluid">
+    <%= form_with(url: my_selling_items_path, method: :get, model: @form) do |f| %>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item p-2">
+          <div class="input-group">
+            <span class="input-group-text">検索キーワード</span>
+            <%= f.text_field :search_keyword, class: 'form-control' %>
+          </div>
+        </li>
+        <li class="nav-item p-2">
+          <%= f.button type: :submit, class: "btn btn-primary" do %>
+            <img src="<%= Item.image_url(Item::SEARCH_ICON_ITEM_ID) %>">
+            検索
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+</div>
+<hr>
+<% if @form.items.empty? %>
+  <%= render 'shared/no_items' %>
+<% else %>
+  <ul class="list-group">
+    <% @form.items.each do |item| %>
+      <li class="list-group-item">
+        <div class="row">
+          <%= render 'shared/item_in_list', item: item %>
+          <div class="col-md-auto">
+            <a href="<%= new_my_selling_item_path(selling_item: { slot_index: item.slot_index, transaction_type: :coin }) %>" class="btn btn-primary">
+              出品
+            </a>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

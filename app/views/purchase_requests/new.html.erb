@@ -1,0 +1,14 @@
+<h1>ほしい物リクエスト</h1>
+
+<h2>
+  <img src="<%= @purchase_request.item.image_url %>">
+  <%= item_name_with_metadata(@purchase_request.item) %>
+</h2>
+
+<%= form_with(model: @purchase_request, local: true, url: purchase_requests_path) do |f| %>
+  <%= render 'shared/item_form', f: f %>
+<% end %>
+
+
+
+

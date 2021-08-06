@@ -46,7 +46,7 @@
             <%= selling_item.user.name %>
           </div>
           <div class="col-sm">
-            <%= render 'shared/selling_item_transaction_info', selling_item: selling_item %>
+            <%= render 'shared/item_transaction_info', item: selling_item %>
           </div>
           <div class="col-md-auto">
             <%= link_to "購入", new_my_purchased_item_path(selling_item_id: selling_item.id), class: 'btn btn-primary w-100' %>

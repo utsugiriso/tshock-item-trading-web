@@ -1,0 +1,18 @@
+<% purchase_requests = PurchaseRequest.where.not(user_id: current_user.id) %>
+<%= render 'header_tab' %>
+<% if purchase_requests.empty? %>
+  <%= render 'shared/no_items' %>
+<% else %>
+  <ul class="list-group">
+    <% purchase_requests.each do |purchase_request| %>
+      <li class="list-group-item">
+        <div class="row">
+          <%= render 'shared/item_in_list', item: purchase_request.item, stack: purchase_request.stack %>
+          <div class="col-md-auto">
+            <%= render 'shared/item_transaction_info', item: purchase_request %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

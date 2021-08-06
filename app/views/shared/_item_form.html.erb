@@ -1,0 +1,45 @@
+<%= f.hidden_field :item_id %>
+<%= f.hidden_field :transaction_type %>
+<% if f.object.coin_transaction_type? %>
+  <ul class="list-group mb-3 list-group-flush">
+    <li class="list-group-item">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item">
+          <div class="input-group">
+            <span class="input-group-text">個数</span>
+            <%= f.number_field :stack, min: 1, max: local_assigns[:max_stack] || 999, class: 'form-control' %>
+          </div>
+        </li>
+      </ul>
+    </li>
+    <li class="list-group-item">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item">
+          <div class="input-group">
+            <span class="input-group-text"><img src="<%= Item.image_url(Item::PLATINUM_COIN_ID) %>"></span>
+            <%= f.number_field :platinum_coin_count, min: 0, max: 99, class: 'form-control' %>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <span class="input-group-text"><img src="<%= Item.image_url(Item::GOLD_COIN_ID) %>"></span>
+            <%= f.number_field :gold_coin_count, min: 0, max: 99, class: 'form-control' %>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <span class="input-group-text"><img src="<%= Item.image_url(Item::SILVER_COIN_ID) %>"></span>
+            <%= f.number_field :silver_coin_count, min: 0, max: 99, class: 'form-control' %>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <span class="input-group-text"><img src="<%= Item.image_url(Item::COPPER_COIN_ID) %>"></span>
+            <%= f.number_field :copper_coin_count, min: 0, max: 99, class: 'form-control' %>
+          </div>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <%= f.submit "登録", class: 'btn btn-primary w-100' %>
+<% end %>

@@ -5,7 +5,7 @@ class Item
   attribute :id, :integer
   attribute :stack, :integer
   attribute :prefix_id, :integer
-  attribute :inventory_index, :integer
+  attribute :slot_index, :integer
 
   COPPER_COIN_ID = 71
   SILVER_COIN_ID = 72
@@ -23,11 +23,6 @@ class Item
   VOID_BAG_ID = 4131
 
   SEARCH_ICON_ITEM_ID = 1299
-
-  COPPER_COIN_WORTH = 1
-  SILVER_COIN_WORTH = 100
-  GOLD_COIN_WORTH = 10000
-  PLATINUM_COIN_WORTH = 1000000
 
   def item_definition
     Settings.items[self.id]
@@ -73,8 +68,16 @@ class Item
 
   alias empty? invalid?
 
+  def valid?
+    !invalid?
+  end
+
+  def self.coin?(item_id)
+    COIN_IDS.include?(item_id)
+  end
+
   def coin?
-    COIN_IDS.include?(self.id)
+    Item.coin?(self.id)
   end
 
   def piggy_bank?
@@ -124,17 +127,34 @@ class Item
   end
 
   def storage_item_ids
-    return nil if self.inventory_index.nil?
-    if TsCharacter::INVENTORY_SLOT_RANGE.include?(self.inventory_index)
-      nil
-    elsif TsCharacter::PIGGY_RANGE.include?(self.inventory_index)
+    raise StandardError.new("slot_indexが指定されていない場合はstorage_item_idsを取得できません") if self.slot_index.nil?
+
+    if TsCharacter::INVENTORY_SLOT_RANGE.include?(self.slot_index)
+      [CHARACTER_INVENTORY_ID]
+    elsif TsCharacter::PIGGY_RANGE.include?(self.slot_index)
       [PIGGY_BANK_ID, MONEY_THROUGH]
-    elsif TsCharacter::SAFE_RANGE.include?(self.inventory_index)
+    elsif TsCharacter::SAFE_RANGE.include?(self.slot_index)
       [SAFE_ID]
-    elsif TsCharacter::FORGE_RANGE.include?(self.inventory_index)
+    elsif TsCharacter::FORGE_RANGE.include?(self.slot_index)
       [DEFENDERS_FORGE_ID]
-    elsif TsCharacter::VOID_RANGE.include?(self.inventory_index)
+    elsif TsCharacter::VOID_RANGE.include?(self.slot_index)
       [VOID_BAG_ID, VOID_VAULT_ID]
+    else
+      nil
     end
+  end
+
+  def self.search_item_ids(search_keyword)
+    item_ids = []
+
+    search_keyword.split(/[[:blank:]]/).reject(&:blank?).each do |keyword|
+      Settings.items.each do |item_id, names|
+        # Settings yamlなのでmapが使えない
+        item_id = item_id.to_s.to_i
+        item_ids << item_id if !Item.coin?(item_id) && (names[:name].downcase.include?(keyword.downcase) || names[:internal_name].downcase.include?(keyword.downcase))
+      end
+    end
+
+    item_ids
   end
 end

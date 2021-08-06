@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs mb-3">
+  <%= render 'header_tab_item', action_name: :my_index, title: "自分のリクエスト", href: my_index_purchase_requests_path %>
+  <%= render 'header_tab_item', action_name: :index, title: "みんなのリクエスト", href: purchase_requests_path %>
+  <%= render 'header_tab_item', action_name: :search_items, title: "アイテム検索", href: search_items_purchase_requests_path %>
+</ul>

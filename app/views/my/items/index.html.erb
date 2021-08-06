@@ -7,7 +7,7 @@
         <div class="row">
           <%= render 'shared/item_in_list', item: item %>
           <div class="col-md-auto">
-            <a href="<%= new_my_selling_item_path(selling_item: { inventory_index: item.inventory_index, transaction_type: :coin }) %>" class="btn btn-primary">
+            <a href="<%= new_my_selling_item_path(selling_item: { slot_index: item.slot_index, transaction_type: :coin }) %>" class="btn btn-primary">
               出品
             </a>
           </div>

@@ -1,3 +1,9 @@
 <li class="nav-item">
-  <a class="nav-link <%= :active if @status == SellingItem.statuses[status] %>" href="<%= my_selling_items_path(status: SellingItem.statuses[status]) %>"><%= SellingItem.statuses_i18n[status] %></a>
+  <a class="nav-link <%= :active if @status == SellingItem.statuses[status] %>" href="<%= my_selling_items_path(status: SellingItem.statuses[status]) %>">
+    <% if status.nil? %>
+      出品可能アイテム
+    <% else %>
+      <%= SellingItem.statuses_i18n[status] %>
+    <% end %>
+  </a>
 </li>

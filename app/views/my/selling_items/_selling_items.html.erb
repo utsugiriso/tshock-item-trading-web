@@ -20,7 +20,9 @@
           <div class="col-md-auto">
             <% case @status %>
             <% when SellingItem.statuses[:on_sale] %>
-              <%= link_to "キャンセル", my_selling_item_path(selling_item), method: :delete, class: 'btn btn-warning w-100' %>
+              <%= form_with url: my_selling_item_path(selling_item), method: :delete do |f| %>
+                <%= f.submit "キャンセル", class: 'btn btn-warning w-100' %>
+              <% end %>
             <% when SellingItem.statuses[:canceled] %>
               <img src="<%= Item.storage_item_image_url(selling_item.storage_item_id) %>">
             <% when SellingItem.statuses[:paying] %>

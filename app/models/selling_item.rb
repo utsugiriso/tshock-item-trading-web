@@ -39,6 +39,10 @@ class SellingItem < ApplicationRecord
     @item ||= Item.new(id: self.item_id, stack: self.stack, prefix_id: self.prefix_id)
   end
 
+  def sold?
+    paying! || paid?
+  end
+
   def load_item_by_slot_index
     @item = self.user.ts_character.items[slot_index]
     self.item_id = @item.id

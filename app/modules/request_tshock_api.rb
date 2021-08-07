@@ -23,7 +23,7 @@ module RequestTshockApi
 
     def player_names
       player_names = []
-      Settings.tshock.api_hosts do |api_host|
+      Settings.tshock.api_hosts.each do |api_host|
         server_status = server_status(api_host)
         if server_status
           player_names += server_status['players'].map{|player| player['nickname']}

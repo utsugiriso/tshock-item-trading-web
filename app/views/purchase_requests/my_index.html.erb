@@ -12,7 +12,9 @@
             <%= render 'shared/item_transaction_info', item: purchase_request %>
           </div>
           <div class="col-md-auto">
-            <%= link_to "削除", purchase_request_path(purchase_request), method: :delete, class: 'btn btn-warning w-100' %>
+            <%= form_with url: purchase_request_path(purchase_request), method: :delete do |f| %>
+              <%= f.submit "削除", class: 'btn btn-warning w-100' %>
+            <% end %>
           </div>
         </div>
       </li>

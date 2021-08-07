@@ -8,4 +8,6 @@
 </h2>
 
 <%= render 'shared/item_transaction_info', item: @selling_item %>
-<%= link_to '購入する', my_purchased_items_path(selling_item_id: @selling_item.id), method: :post, class: 'btn btn-primary w-100 mt-3' %>
+<%= form_with url: my_purchased_items_path(selling_item_id: @selling_item.id) do |f| %>
+  <%= f.submit '購入する', class: 'btn btn-primary w-100 mt-3' %>
+<% end %>

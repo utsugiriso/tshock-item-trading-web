@@ -4,6 +4,7 @@ class SellingItemPayJob < ApplicationJob
   def perform(selling_item_id)
     selling_item = SellingItem.find(selling_item_id)
     if selling_item.user.playing?
+      selling_item.paying!
       SellingItemPayJob.set(wait: 10.minutes).perform_later
     else
       selling_item.paid!

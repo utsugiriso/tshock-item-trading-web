@@ -50,6 +50,8 @@ class TsCharacter < ApplicationRecord
   attribute :has_defenders_forge, :boolean, default: false
   attribute :has_void_bag, :boolean, default: false
 
+  after_initialize :items
+
   def items(storage_item_id = nil)
     @items ||= self['Inventory'].split(ITEMS_DELIMITER).
       map { |item_string| item_string.split(ITEM_METADATA_DELIMITER) }.

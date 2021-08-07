@@ -27,6 +27,9 @@
       <li class="list-group-item">
         <div class="row">
           <%= render 'shared/item_in_list', item: item %>
+          <div class="col-sm">
+            <img src="<%= Item.storage_item_image_url(TsCharacter.storage_item_id_by_slot_index(item.slot_index)) %>">
+          </div>
           <div class="col-md-auto">
             <a href="<%= new_my_selling_item_path(selling_item: { slot_index: item.slot_index, transaction_type: :coin }) %>" class="btn btn-primary">
               出品

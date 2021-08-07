@@ -10,7 +10,7 @@
     <% @selling_items.each do |selling_item| %>
       <li class="list-group-item">
         <div class="row">
-          <%= render 'shared/item_in_list', item: selling_item.item, stack: selling_item.stack %>
+          <%= render 'shared/item_in_list', item: selling_item.item %>
           <div class="col-sm">
             <%= render 'shared/item_transaction_info', item: selling_item %>
           </div>

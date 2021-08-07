@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link <%= :active if controller_name == 'selling_items' %>" href="<%= selling_items_path %>">
+      購入可能アイテム
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= :active if controller_name == 'purchased_items' %>" href="<%= my_purchased_items_path %>">
+      購入済みアイテム
+    </a>
+  </li>
+</ul>

@@ -1,0 +1,26 @@
+<%= render 'my/purchased_items/header_tab' %>
+
+<% purchased_items = current_user.purchased_items.order(id: :desc).limit(TsCharacter::STORAGE_SLOT_COUNT) %>
+<% if purchased_items.empty? %>
+  <%= render 'shared/no_items' %>
+<% else %>
+  <ul class="list-group">
+    <% purchased_items.each do |purchased_item| %>
+      <li class="list-group-item">
+        <div class="row">
+          <%= render 'shared/item_in_list', item: purchased_item.item %>
+          <div class="col-sm">
+            <%= render 'shared/item_transaction_info', item: purchased_item.selling_item %>
+          </div>
+          <div class="col-sm text-end">
+            購入日：<%= I18n.l(purchased_item.created_at) %>
+          </div>
+          <div class="col-md-auto">
+            <img src="<%= Item.storage_item_image_url(purchased_item.storage_item_id) %>">
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+

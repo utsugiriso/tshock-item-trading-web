@@ -17,6 +17,6 @@ class PurchaseRequest < ApplicationRecord
   end
 
   def within_maximum_request_count
-    self.errors.add(:base, "ほしい物リクエストできるのは#{TsCharacter::BANK_SLOT_COUNT}個までです") if self.user.purchase_requests.count >= TsCharacter::BANK_SLOT_COUNT
+    self.errors.add(:base, "ほしい物リクエストできるのは#{TsCharacter::STORAGE_SLOT_COUNT}個までです") if self.user.purchase_requests.count >= TsCharacter::STORAGE_SLOT_COUNT
   end
 end

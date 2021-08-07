@@ -14,6 +14,10 @@ class PurchasedItem < ApplicationRecord
   before_create :settle
   after_create :update_selling_item_status
 
+  def item
+    selling_item.item
+  end
+
   private
 
   def selling_item_canceled_if_new_record

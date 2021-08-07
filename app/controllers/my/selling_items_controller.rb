@@ -4,7 +4,7 @@ class My::SellingItemsController < ApplicationController
       @form = SalableItems::SearchForm.new(search_form_params)
     else
       @status = params[:status].to_i
-      @selling_items = current_user.selling_items.includes(:purchased_item).where(status: @status).order(id: :desc).limit(TsCharacter::BANK_SLOT_COUNT)
+      @selling_items = current_user.selling_items.includes(:purchased_item).where(status: @status).order(id: :desc).limit(TsCharacter::STORAGE_SLOT_COUNT)
     end
   end
 

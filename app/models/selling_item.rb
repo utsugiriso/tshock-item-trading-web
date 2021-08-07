@@ -40,7 +40,7 @@ class SellingItem < ApplicationRecord
   end
 
   def sold?
-    paying! || paid?
+    paying? || paid?
   end
 
   def load_item_by_slot_index
@@ -75,7 +75,7 @@ class SellingItem < ApplicationRecord
   end
 
   def within_maximum_selling_item_count
-    self.errors.add(:base, "同時に出品可能なのは#{TsCharacter::BANK_SLOT_COUNT}個までです") if self.user.selling_items.count >= TsCharacter::BANK_SLOT_COUNT
+    self.errors.add(:base, "同時に出品可能なのは#{TsCharacter::STORAGE_SLOT_COUNT}個までです") if self.user.selling_items.count >= TsCharacter::STORAGE_SLOT_COUNT
   end
 
   def check_coin

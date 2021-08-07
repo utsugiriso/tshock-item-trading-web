@@ -75,13 +75,13 @@ class TsCharacter < ApplicationRecord
     end
   end
 
-  def self.salable_items(items)
-    items.select { |item| item.tradable? }
-  end
-
   def salable_items(storage_item_id = nil)
     @salable_items = {} if @salable_items.nil?
-    @salable_items[storage_item_id] ||= TsCharacter.salable_items(self.items(storage_item_id))
+    @salable_items[storage_item_id] ||= if storage_item_id.nil?
+                                          INVENTORY_RANGES.keys.map { |storage_item_id| self.items(storage_item_id).select(&:tradable?) }.flatten
+                                        else
+                                          self.items(storage_item_id).select(&:tradable?)
+                                        end
   end
 
   def has_item_ids?(item_ids)
@@ -159,10 +159,10 @@ class TsCharacter < ApplicationRecord
       item.destroy if item.coin?
     end
 
-    self.set_coin(Item::PLATINUM_COIN_ID,  self.platinum_coin_count)
-    self.set_coin(Item::GOLD_COIN_ID,  self.gold_coin_count)
-    self.set_coin(Item::SILVER_COIN_ID,  self.silver_coin_count)
-    self.set_coin(Item::COPPER_COIN_ID,  self.copper_coin_count)
+    self.set_coin(Item::PLATINUM_COIN_ID, self.platinum_coin_count)
+    self.set_coin(Item::GOLD_COIN_ID, self.gold_coin_count)
+    self.set_coin(Item::SILVER_COIN_ID, self.silver_coin_count)
+    self.set_coin(Item::COPPER_COIN_ID, self.copper_coin_count)
 
     self.update_inventory
   end
